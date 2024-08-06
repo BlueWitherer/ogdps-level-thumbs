@@ -5,11 +5,11 @@
         "android": "2.206",
         "mac": "2.206"
     },
-    "version": "v1.0.7",
-    "id": "cdc.level_thumbnails",
-    "name": "Level Thumbnails",
-    "developer": "cdc",
-    "repository": "https://github.com/cdc-sys/level-thumbs-mod",
+    "version": "v1.2.0-beta.3",
+    "id": "cheeseworks.ogdps-level-thumbs",
+    "name": "OGDPS Level Thumbnails",
+    "developer": "Cheeseworks",
+    "repository": "https://github.com/BlueWitherer/ogdps-level-thumbs",
     "description": "Adds thumbnails to levels in search.",
 
     "resources": {
