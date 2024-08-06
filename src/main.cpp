@@ -9,31 +9,43 @@ using namespace geode::prelude;
 #include "utils.hpp"
 #include "ImageCache.hpp"
 #include "Zoom.hpp"
-class $modify(MenuLayer){
-    bool init(){
-        MenuLayer::init();
-        if (Mod::get()->getSavedValue<bool>("temp_newServerNotifOpened")){
+class $modify(MenuLayer)
+{
+    bool init()
+    {
+        if (MenuLayer::init())
+        {
+            bool isLoadedUTIL = geode::Loader::get()->isModLoaded("cheeseworks.ogdps-util");
+			bool isLoadedDRPC = geode::Loader::get()->isModLoaded("cheeseworks.ogdps-discord-rpc");
+
+            if (!isLoadedUTIL || !isLoadedDRPC)
+            {
+                auto alert = geode::createQuickPopup(
+                    "Warning",
+                    "You're <cr>missing</c> one or more <cy>important</c> mods that help customize your <cp>ObsidianGDPS</c> client. Would you like to <co>reinstall</c> your client?",
+                    "No", "YES",
+                    [](auto, bool btn2)
+                    {
+                        if (btn2)
+                        {
+                            web::openLinkInBrowser("https://www.obsidianmg.cc/gd-team/#gdps");
+                        };
+                    },
+                    false);
+
+                alert->m_scene = this;
+                alert->show();
+            };
+
             return true;
-        }
-        auto flalert = createQuickPopup(
-        "Update!",
-        "The <cj>Thumbnails</c> mod has a new <cb>Discord</c> now!\n"
-        "Wanna <cg>join</c> to submit <cy>Thumbnails</c> and <cg>more</c>?",
-        "No Thanks", "JOIN!",
-        [this](auto, bool btn2) {
-            if (btn2) {
-                CCApplication::sharedApplication()->openURL("https://discord.gg/GuagJDsqds");
-            }
-            Mod::get()->setSavedValue<bool>("temp_newServerNotifOpened",true);
-        },false);
-        flalert->m_scene = this;
-        flalert->show();
-        return true;
-    }
+        };
+    };
 };
-class $modify(MyLevelCell, LevelCell) {
-    
-    struct Fields{
+class $modify(MyLevelCell, LevelCell)
+{
+
+    struct Fields
+    {
         Ref<LoadingCircle> m_loadingIndicator;
         Ref<CCLayerColor> m_separator;
         Ref<CCLabelBMFont> m_downloadProgressText;
@@ -45,13 +57,15 @@ class $modify(MyLevelCell, LevelCell) {
         std::mutex m;
     };
 
-    void loadCustomLevelCell() {
+    void loadCustomLevelCell()
+    {
         LevelCell::loadCustomLevelCell();
-        if(CCLayerColor* bg = getChildOfType<CCLayerColor>(this, 0)){
+        if (CCLayerColor *bg = getChildOfType<CCLayerColor>(this, 0))
+        {
             m_fields->m_background = bg;
             bg->setZOrder(-2);
-        }
-        
+        };
+
         m_fields->m_clippingNode = CCClippingNode::create();
 
         auto mainLayer = getChildByID("main-layer");
@@ -65,7 +79,7 @@ class $modify(MyLevelCell, LevelCell) {
         m_fields->m_separator->setZOrder(-2);
         m_fields->m_separator->setOpacity(50);
         m_fields->m_separator->setScaleX(0.45f);
-        m_fields->m_separator->setVisible(false);	
+        m_fields->m_separator->setVisible(false);
         m_fields->m_separator->ignoreAnchorPointForPosition(false);
 
         addChild(m_fields->m_separator);
@@ -74,7 +88,7 @@ class $modify(MyLevelCell, LevelCell) {
         m_fields->m_loadingIndicator->setScale(0.3f);
         m_fields->m_loadingIndicator->show();
 
-        m_fields->m_downloadProgressText = CCLabelBMFont::create("0%","bigFont.fnt");
+        m_fields->m_downloadProgressText = CCLabelBMFont::create("0%", "bigFont.fnt");
         m_fields->m_downloadProgressText->setPosition({352, 1});
         m_fields->m_downloadProgressText->setAnchorPoint({1, 0});
         m_fields->m_downloadProgressText->setScale(0.25f);
@@ -87,41 +101,53 @@ class $modify(MyLevelCell, LevelCell) {
         schedule(m_fields->m_parentCheck);
 
         retain();
-        
+
         startDownload();
-    }
+    };
 
-    //hacky but we have no other choice
-    void checkParent(float dt) {
-        if(CCNode* node = getParent()){
-            if(typeinfo_cast<DailyLevelNode*>(node)){
+    // hacky but we have no other choice
+    void checkParent(float dt)
+    {
+        if (CCNode *node = getParent())
+        {
+            if (typeinfo_cast<DailyLevelNode *>(node))
+            {
                 setDailyAttributes();
-            }
+            };
+
             unschedule(m_fields->m_parentCheck);
-        }
-    }
+        };
+    };
 
-    void startDownload() {
+    void startDownload()
+    {
 
-        if(CCImage* image = ImageCache::get()->getImage(fmt::format("thumb-{}", (int)m_level->m_levelID))){
+        if (CCImage *image = ImageCache::get()->getImage(fmt::format("thumb-{}", (int)m_level->m_levelID)))
+        {
             m_fields->m_image = image;
             imageCreationFinished(m_fields->m_image);
             return;
-        }
+        };
 
-        std::string URL = fmt::format("https://raw.githubusercontent.com/BlueWitherer/ogdps-level-thumbs-data/main/thumbs/{}.png",(int)m_level->m_levelID);
+        std::string URL = fmt::format("https://raw.githubusercontent.com/BlueWitherer/ogdps-level-thumbs-data/main/thumbs/{}.png", (int)m_level->m_levelID);
         int id = m_level->m_levelID.value();
 
         auto req = web::WebRequest();
-        m_fields->m_downloadListener.bind([id, this](web::WebTask::Event* e){
-            if (auto res = e->getValue()){
-                if (!res->ok()) {
-                    onDownloadFailed();
-                } else {
-                    m_fields->m_downloadProgressText->removeFromParent();
-                    auto data = res->data();
-                    
-                    std::thread imageThread = std::thread([data, id, this](){
+        m_fields->m_downloadListener.bind([id, this](web::WebTask::Event *e)
+                                          {
+                                              if (auto res = e->getValue())
+                                              {
+                                                  if (!res->ok())
+                                                  {
+                                                      onDownloadFailed();
+                                                  }
+                                                  else
+                                                  {
+                                                      m_fields->m_downloadProgressText->removeFromParent();
+                                                      auto data = res->data();
+
+                                                      std::thread imageThread = std::thread([data, id, this]()
+                                                                                            {
                         m_fields->m.lock();
                         m_fields->m_image = new CCImage();
                         m_fields->m_image->initWithImageData(const_cast<uint8_t*>(data.data()),data.size());
@@ -130,44 +156,50 @@ class $modify(MyLevelCell, LevelCell) {
                             m_fields->m_image->release();
                             imageCreationFinished(m_fields->m_image);
                         });
-                        m_fields->m.unlock();
-                    });
-                    imageThread.detach();
-                }
-            } else if (web::WebProgress* progress = e->getProgress()){
-                if (!progress->downloadProgress().has_value()){
-                    return;
-                }
-                m_fields->m_downloadProgressText->setString(fmt::format("{}%",round(e->getProgress()->downloadProgress().value())).c_str());
-            } else if (e->isCancelled()){
-                geode::log::warn("Exited before finishing");
-            } 
-            
-        });
+                        m_fields->m.unlock(); });
+                                                      imageThread.detach();
+                                                  };
+                                              }
+                                              else if (web::WebProgress *progress = e->getProgress())
+                                              {
+                                                  if (!progress->downloadProgress().has_value())
+                                                  {
+                                                      return;
+                                                  }
+                                                  m_fields->m_downloadProgressText->setString(fmt::format("{}%", round(e->getProgress()->downloadProgress().value())).c_str());
+                                              }
+                                              else if (e->isCancelled())
+                                              {
+                                                  geode::log::warn("Exited before finishing");
+                                              } });
         auto downloadTask = req.get(URL);
         m_fields->m_downloadListener.setFilter(downloadTask);
-    }
+    };
 
-    void imageCreationFinished(CCImage* image){
+    void imageCreationFinished(CCImage * image)
+    {
 
-        CCTexture2D* texture = new CCTexture2D();
+        CCTexture2D *texture = new CCTexture2D();
         texture->initWithImage(image);
         onDownloadFinished(CCSprite::createWithTexture(texture));
         texture->release();
-    }
+    };
 
-    void onDownloadFailed() {
+    void onDownloadFailed()
+    {
         m_fields->m_separator->removeFromParent();
         handleFinish();
-    }
+    };
 
-    void handleFinish(){
+    void handleFinish()
+    {
         m_fields->m_loadingIndicator->fadeAndRemove();
         m_fields->m_downloadProgressText->removeFromParent();
         release();
-    }
+    };
 
-    void onDownloadFinished(CCSprite* image) {
+    void onDownloadFinished(CCSprite * image)
+    {
 
         float imgScale = m_fields->m_background->getContentSize().height / image->getContentSize().height;
 
@@ -175,13 +207,14 @@ class $modify(MyLevelCell, LevelCell) {
 
         float separatorXMul = 1;
 
-        if(m_compactView){
-            image->setScale(image->getScale()*1.3f);
+        if (m_compactView)
+        {
+            image->setScale(image->getScale() * 1.3f);
             separatorXMul = 0.75;
-        }
+        };
 
-        CCLayerColor* rect = CCLayerColor::create({255, 255, 255});
-        
+        CCLayerColor *rect = CCLayerColor::create({255, 255, 255});
+
         float angle = 18;
 
         CCSize scaledImageSize = {image->getScaledContentSize().width, image->getContentSize().height * imgScale};
@@ -189,8 +222,8 @@ class $modify(MyLevelCell, LevelCell) {
         rect->setSkewX(angle);
         rect->setContentSize(scaledImageSize);
         rect->setAnchorPoint({1, 0});
-        
-        m_fields->m_separator->setSkewX(angle*2);
+
+        m_fields->m_separator->setSkewX(angle * 2);
         m_fields->m_separator->setContentSize(scaledImageSize);
         m_fields->m_separator->setAnchorPoint({1, 0});
 
@@ -200,50 +233,54 @@ class $modify(MyLevelCell, LevelCell) {
         m_fields->m_clippingNode->setAnchorPoint({1, 0});
         m_fields->m_clippingNode->setPosition({m_fields->m_background->getContentSize().width, 0.3f});
 
-        float scale =  m_fields->m_background->getContentSize().height / m_fields->m_clippingNode ->getContentSize().height;
+        float scale = m_fields->m_background->getContentSize().height / m_fields->m_clippingNode->getContentSize().height;
 
         rect->setScale(scale);
-        image->setPosition({m_fields->m_clippingNode ->getContentSize().width/2, m_fields->m_clippingNode ->getContentSize().height/2});
+        image->setPosition({m_fields->m_clippingNode->getContentSize().width / 2, m_fields->m_clippingNode->getContentSize().height / 2});
 
-        m_fields->m_separator->setPosition({m_fields->m_background->getContentSize().width - m_fields->m_separator->getContentSize().width/2 - (20 * separatorXMul), 0.3f});
+        m_fields->m_separator->setPosition({m_fields->m_background->getContentSize().width - m_fields->m_separator->getContentSize().width / 2 - (20 * separatorXMul), 0.3f});
         m_fields->m_separator->setVisible(true);
 
         m_fields->m_clippingNode->setZOrder(-1);
 
         addChild(m_fields->m_clippingNode);
 
-        if(typeinfo_cast<DailyLevelNode*>(getParent())){
+        if (typeinfo_cast<DailyLevelNode *>(getParent()))
+        {
             setDailyAttributes();
-        }
+        };
 
         handleFinish();
-    }
+    };
 
-    void setDailyAttributes(){
-        
+    void setDailyAttributes()
+    {
+
         float dailyMult = 1.22;
 
         m_fields->m_separator->setScaleX(0.45 * dailyMult);
         m_fields->m_separator->setScaleY(dailyMult);
-        m_fields->m_separator->setPosition({m_fields->m_background->getContentSize().width - (m_fields->m_separator->getContentSize().width * dailyMult)/2 - 20 + 7, -7.9f});
+        m_fields->m_separator->setPosition({m_fields->m_background->getContentSize().width - (m_fields->m_separator->getContentSize().width * dailyMult) / 2 - 20 + 7, -7.9f});
         m_fields->m_clippingNode->setScale(dailyMult);
         m_fields->m_clippingNode->setPosition(m_fields->m_clippingNode->getPosition().x + 7, -7.9f);
 
-        DailyLevelNode* dln = typeinfo_cast<DailyLevelNode*>(getParent());
+        DailyLevelNode *dln = typeinfo_cast<DailyLevelNode *>(getParent());
 
-        if(CCScale9Sprite* bg = typeinfo_cast<CCScale9Sprite*>(dln->getChildByID("background"))){
+        if (CCScale9Sprite *bg = typeinfo_cast<CCScale9Sprite *>(dln->getChildByID("background")))
+        {
 
-            CCScale9Sprite* border = CCScale9Sprite::create("GJ_square07.png");
+            CCScale9Sprite *border = CCScale9Sprite::create("GJ_square07.png");
             border->setContentSize(bg->getContentSize());
             border->setPosition(bg->getPosition());
             border->setColor(bg->getColor());
             border->setZOrder(5);
             border->setID("border"_spr);
             dln->addChild(border);
-        }
+        };
 
-        if(CCNode* node = dln->getChildByID("crown-sprite")){
+        if (CCNode *node = dln->getChildByID("crown-sprite"))
+        {
             node->setZOrder(6);
-        }
-    }
+        };
+    };
 };
