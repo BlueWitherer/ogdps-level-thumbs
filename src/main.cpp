@@ -18,7 +18,7 @@ class $modify(MenuLayer)
             bool isLoadedUTIL = geode::Loader::get()->isModLoaded("cheeseworks.ogdps-util");
 			bool isLoadedDRPC = geode::Loader::get()->isModLoaded("cheeseworks.ogdps-discord-rpc");
 
-            if (!isLoadedUTIL || !isLoadedDRPC)
+            if (!isLoadedUTIL && !isLoadedDRPC)
             {
                 auto alert = geode::createQuickPopup(
                     "Warning",
