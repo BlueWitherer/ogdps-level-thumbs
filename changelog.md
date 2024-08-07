@@ -1,3 +1,5 @@
+###### Official changelog from the developer of the original mod.
+---
 # v1.0.7
 - Buggy zooming and thumbnail popup bugfixes
 - Crash fixes
