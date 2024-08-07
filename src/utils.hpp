@@ -1,5 +1,6 @@
 #pragma once
 
-namespace levelthumbs{
+namespace levelthumbs
+{
     int getQualityMultiplier();
-}
+};

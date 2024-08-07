@@ -7,26 +7,28 @@
 
 using namespace geode::prelude;
 
-class ImageCache {
+class ImageCache
+{
 
 protected:
-    static ImageCache* instance;
-public:
+    static ImageCache *instance;
 
+public:
     Ref<CCDictionary> m_imageDict;
 
     ImageCache();
-    void addImage(CCImage* image, std::string key);
-    CCImage* getImage(std::string key);
+    void addImage(CCImage *image, std::string key);
+    CCImage *getImage(std::string key);
 
-    static ImageCache* get(){
+    static ImageCache *get()
+    {
 
-        if (!instance) {
+        if (!instance)
+        {
             instance = new ImageCache();
         };
         return instance;
-    }
+    };
 };
-
 
 #endif

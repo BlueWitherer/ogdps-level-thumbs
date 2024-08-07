@@ -6,9 +6,11 @@ using namespace geode::prelude;
 #include <Geode/modify/LevelCell.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/utils/web.hpp>
+
 #include "utils.hpp"
 #include "ImageCache.hpp"
 #include "Zoom.hpp"
+
 class $modify(MenuLayer)
 {
     bool init()
@@ -16,7 +18,7 @@ class $modify(MenuLayer)
         if (MenuLayer::init())
         {
             bool isLoadedUTIL = geode::Loader::get()->isModLoaded("cheeseworks.ogdps-util");
-			bool isLoadedDRPC = geode::Loader::get()->isModLoaded("cheeseworks.ogdps-discord-rpc");
+            bool isLoadedDRPC = geode::Loader::get()->isModLoaded("cheeseworks.ogdps-discord-rpc");
 
             if (!isLoadedUTIL && !isLoadedDRPC)
             {
@@ -41,9 +43,9 @@ class $modify(MenuLayer)
         };
     };
 };
+
 class $modify(MyLevelCell, LevelCell)
 {
-
     struct Fields
     {
         Ref<LoadingCircle> m_loadingIndicator;
@@ -60,6 +62,7 @@ class $modify(MyLevelCell, LevelCell)
     void loadCustomLevelCell()
     {
         LevelCell::loadCustomLevelCell();
+
         if (CCLayerColor *bg = getChildOfType<CCLayerColor>(this, 0))
         {
             m_fields->m_background = bg;

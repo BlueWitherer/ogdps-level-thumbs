@@ -7,13 +7,15 @@
 
 using namespace geode::prelude;
 
-class Zoom {
+class Zoom
+{
 
 protected:
-    static Zoom* instance;
+    static Zoom *instance;
     CCPoint m_lastMousePos;
     CCPoint m_deltaMousePos;
     bool m_isDragging = false;
+
 public:
     bool m_isTouching = false;
 
@@ -21,14 +23,15 @@ public:
     void update(float dt);
     void doZoom(float zoom);
 
-    static Zoom* get(){
-
-        if (!instance) {
+    static Zoom *get()
+    {
+        if (!instance)
+        {
             instance = new Zoom();
         };
-        return instance;
-    }
-};
 
+        return instance;
+    };
+};
 
 #endif
