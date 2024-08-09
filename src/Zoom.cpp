@@ -30,18 +30,26 @@ void Zoom::doZoom(float y)
 
     CCNode *thumbnailPopup = CCScene::get()->getChildByID("ThumbnailPopup");
     if (!thumbnailPopup)
+    {
         return;
+    };
 
     CCLayer *popupLayer = getChildOfType<CCLayer>(thumbnailPopup, 0);
     if (!popupLayer)
+    {
         return;
+    };
 
     CCNode *thumbnail = thumbnailPopup->getChildByIDRecursive("thumbnail");
     if (!thumbnail)
+    {
         return;
+    };
 
     if (!checkIfInside(popupLayer, pos))
+    {
         return;
+    };
 
     CCSize contentSize = thumbnail->getContentSize();
 
@@ -94,21 +102,29 @@ void Zoom::update(float dt)
 
     CCNode *thumbnailPopup = CCScene::get()->getChildByID("ThumbnailPopup");
     if (!thumbnailPopup)
+    {
         return;
+    };
 
     CCLayer *popupLayer = getChildOfType<CCLayer>(thumbnailPopup, 0);
     if (!popupLayer)
+    {
         return;
+    };
 
     CCNode *thumbnail = thumbnailPopup->getChildByIDRecursive("thumbnail");
     if (!thumbnail)
+    {
         return;
+    };
 
     m_deltaMousePos = CCPoint{pos.x - lastMousePos.x, pos.y - lastMousePos.y};
     m_lastMousePos = pos;
 
     if (!checkIfInside(popupLayer, pos) && !m_isDragging)
+    {
         return;
+    };
 
     if (m_isTouching)
     {
