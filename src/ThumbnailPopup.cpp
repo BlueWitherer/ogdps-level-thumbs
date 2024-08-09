@@ -17,15 +17,15 @@ void ThumbnailPopup::onDownload(CCObject *sender)
 void ThumbnailPopup::openDiscordServerPopup(CCObject *sender)
 {
     createQuickPopup(
-        "Uh Oh!",
-        "Hm.. This level seems to not have a <cj>Thumbnail</c>...\n"
-        "Worry not! You can join our <cg>Discord Server</c> and submit a thumbnail <cy>YOURSELF!</c>",
-        "No Thanks", "JOIN!",
+        "Missing Thumbnail",
+        "<cr>This level currently does not have a thumbnail.</c>\n"
+        "You may join our <cb>Discord</c> server to request a thumbnail for this level if it is <cy>rated</c>.",
+        "Cancel", "JOIN",
         [this](auto, bool btn2)
         {
             if (btn2)
             {
-                CCApplication::sharedApplication()->openURL("https://discord.gg/GuagJDsqds");
+                CCApplication::sharedApplication()->openURL("https://www.discord.com/invite/4fRK9bP7rD");
             };
         });
 };
@@ -75,7 +75,7 @@ bool ThumbnailPopup::setup(int id)
     recenterBtn->setVisible(false);
 #endif
 
-    ButtonSprite *infoSprite = ButtonSprite::create("More Info");
+    ButtonSprite *infoSprite = ButtonSprite::create("Learn More");
     m_infoBtn = CCMenuItemSpriteExtra::create(infoSprite, this, menu_selector(ThumbnailPopup::openDiscordServerPopup));
 
     m_infoBtn->setPosition({m_mainLayer->getContentSize().width / 2, 6});
