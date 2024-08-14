@@ -40,6 +40,10 @@ class $modify(MenuLayer)
             };
 
             return true;
+        }
+        else
+        {
+            return false;
         };
     };
 };
