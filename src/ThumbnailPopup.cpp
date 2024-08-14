@@ -8,12 +8,6 @@ using namespace geode::prelude;
 #include "utils.hpp"
 #include "ImageCache.hpp"
 
-void ThumbnailPopup::onDownload(CCObject *sender)
-{
-    std::string URL = fmt::format("https://raw.githubusercontent.com/BlueWitherer/ogdps-level-thumbs-data/main/thumbs/{}.png", m_levelID);
-    CCApplication::sharedApplication()->openURL(URL.c_str());
-};
-
 void ThumbnailPopup::openDiscordServerPopup(CCObject *sender)
 {
     createQuickPopup(
@@ -55,15 +49,6 @@ bool ThumbnailPopup::setup(int id)
 
     m_mainLayer->addChild(border);
     m_mainLayer->addChild(m_clippingNode);
-
-    CCSprite *downloadSprite = CCSprite::createWithSpriteFrameName("GJ_downloadBtn_001.png");
-    m_downloadBtn = CCMenuItemSpriteExtra::create(downloadSprite, this, menu_selector(ThumbnailPopup::onDownload));
-    m_downloadBtn->setEnabled(false);
-    m_downloadBtn->setColor({125, 125, 125});
-
-    m_downloadBtn->setPosition({m_mainLayer->getContentSize().width - 5, 5});
-
-    m_buttonMenu->addChild(m_downloadBtn);
 
     CCSprite *recenterSprite = CCSprite::createWithSpriteFrameName("GJ_undoBtn_001.png");
     CCMenuItemSpriteExtra *recenterBtn = CCMenuItemSpriteExtra::create(recenterSprite, this, menu_selector(ThumbnailPopup::recenter));
@@ -156,10 +141,6 @@ void ThumbnailPopup::recenter(CCObject *sender)
 
 void ThumbnailPopup::onDownloadFinished(CCSprite *image)
 {
-    // thanks for fucking this up sheepdotcom
-    m_downloadBtn->setEnabled(true);
-    m_downloadBtn->setColor({255, 255, 255});
-
     float scale = m_maxHeight / image->getContentSize().height;
     image->setScale(scale);
     image->setUserObject("scale", CCFloat::create(scale));

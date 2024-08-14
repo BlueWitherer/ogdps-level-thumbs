@@ -11,7 +11,6 @@ protected:
     float m_maxHeight = 220;
     EventListener<web::WebTask> m_downloadListener;
     LoadingCircle *m_loadingCircle = LoadingCircle::create();
-    CCMenuItemSpriteExtra *m_downloadBtn;
     CCMenuItemSpriteExtra *m_infoBtn;
     CCClippingNode *m_clippingNode;
     Ref<CCImage> m_image;
@@ -21,7 +20,6 @@ protected:
     void onDownloadFinished(CCSprite *sprite);
     void onDownloadFail();
     void imageCreationFinished(CCImage *image);
-    void onDownload(CCObject *sender);
     void openDiscordServerPopup(CCObject *sender);
     void recenter(CCObject *sender);
 

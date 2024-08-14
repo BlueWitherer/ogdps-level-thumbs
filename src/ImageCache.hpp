@@ -9,7 +9,6 @@ using namespace geode::prelude;
 
 class ImageCache
 {
-
 protected:
     static ImageCache *instance;
 
@@ -27,6 +26,7 @@ public:
         {
             instance = new ImageCache();
         };
+
         return instance;
     };
 };
