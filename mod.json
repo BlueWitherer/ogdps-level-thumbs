@@ -5,7 +5,7 @@
         "android": "2.206",
         "mac": "2.206"
     },
-    "version": "v1.3.0-beta.1",
+    "version": "v1.3.0",
     "id": "cheeseworks.ogdps-level-thumbs",
     "name": "OGDPS Level Thumbnails",
     "developers": [
@@ -20,8 +20,7 @@
     "description": "Adds thumbnails to levels in search.",
     "resources": {
         "sprites": [
-            "resources/thumbnailButton.png",
-            "resources/noThumb.png"
+            "resources/*.png"
         ]
     },
     "settings": {
@@ -42,7 +41,7 @@
     "dependencies": [
         {
             "id": "geode.node-ids",
-            "version": ">=1.7.0",
+            "version": ">=1.13.0",
             "importance": "required"
         }
     ]

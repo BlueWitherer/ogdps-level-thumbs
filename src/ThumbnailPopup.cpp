@@ -192,25 +192,27 @@ class $modify(LevelInfoLayer2, LevelInfoLayer)
 
     bool init(GJGameLevel * p0, bool p1)
     {
-        if (!LevelInfoLayer::init(p0, p1))
+        if (LevelInfoLayer::init(p0, p1))
+        {
+            auto sprite = CCSprite::create("thumbnailButton.png"_spr);
+            auto button = CCMenuItemSpriteExtra::create(
+                sprite, this, menu_selector(LevelInfoLayer2::onThumbnailButton));
+            button->setID("thumbnail-button");
+
+            if (auto menu = getChildByID("left-side-menu"))
+            {
+                if (Mod::get()->getSettingValue<bool>("thumbnailButton"))
+                {
+                    menu->addChild(button);
+                    menu->updateLayout();
+                };
+            };
+
+            return true;
+        }
+        else
         {
             return false;
         };
-
-        auto sprite = CCSprite::create("thumbnailButton.png"_spr);
-        auto button = CCMenuItemSpriteExtra::create(
-            sprite, this, menu_selector(LevelInfoLayer2::onThumbnailButton));
-        button->setID("thumbnail-button");
-
-        if (auto menu = getChildByID("left-side-menu"))
-        {
-            if (Mod::get()->getSettingValue<bool>("thumbnailButton"))
-            {
-                menu->addChild(button);
-                menu->updateLayout();
-            };
-        };
-
-        return true;
     };
 };

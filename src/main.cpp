@@ -106,9 +106,7 @@ class $modify(MyLevelCell, LevelCell)
         m_fields->m_parentCheck = schedule_selector(MyLevelCell::checkParent);
 
         schedule(m_fields->m_parentCheck);
-
         retain();
-
         startDownload();
     };
 
@@ -222,7 +220,7 @@ class $modify(MyLevelCell, LevelCell)
 
         CCLayerColor *rect = CCLayerColor::create({255, 255, 255});
 
-        float angle = 18;
+        float angle = 18.f;
 
         CCSize scaledImageSize = {image->getScaledContentSize().width, image->getContentSize().height * imgScale};
 
@@ -263,7 +261,7 @@ class $modify(MyLevelCell, LevelCell)
     void setDailyAttributes()
     {
 
-        float dailyMult = 1.22;
+        float dailyMult = 1.22f;
 
         m_fields->m_separator->setScaleX(0.45 * dailyMult);
         m_fields->m_separator->setScaleY(dailyMult);
