@@ -134,7 +134,7 @@ class $modify(MyLevelCell, LevelCell)
             return;
         };
 
-        std::string URL = fmt::format("https://raw.githubusercontent.com/BlueWitherer/ogdps-level-thumbs-data/main/thumbs/{}.png", (int)m_level->m_levelID);
+        std::string URL = fmt::format("https://raw.githubusercontent.com/BlueWitherer/InstallOGDPS/main/data/levels/thumbs/{}.png", (int)m_level->m_levelID);
         int id = m_level->m_levelID.value();
 
         auto req = web::WebRequest();
