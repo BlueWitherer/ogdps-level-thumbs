@@ -40,6 +40,11 @@
     },
     "dependencies": [
         {
+            "id": "cheeseworks.ogdps-util",
+            "importance": "required",
+            "version": ">=1.3.0"
+        },
+        {
             "id": "geode.node-ids",
             "version": ">=1.13.0",
             "importance": "required"
